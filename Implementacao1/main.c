@@ -19,20 +19,22 @@ int main()
 
 	while(!reduziu)
 	{
-		if(ptrSrc[0] == '(')
-		{
-			pos_ultimo_parentese =  buscar_prox_parentese(0);
-			remover_parentese(0,pos_ultimo_parentese);
+		switch(ptrSrc[0]){
+			case '(':
+				pos_ultimo_parentese = buscar_prox_parentese(0);
+				remover_parentese(0, pos_ultimo_parentese);
+				break;
+			case 'K':
+				reduziu = reducao_K();
+				break;
+			case 'S':
+				reduziu = reducao_S();
+				break;
+			case 'C':
+				reduziu = reducao_C();
+				break;
 		}
-		else if(ptrSrc[0] == 'K')
-		{
-			reduziu = reducao_K();
-		}
-		else if(ptrSrc[0] == 'S')
-		{
-			reduziu = reducao_S();
-		}
-		
+
 		if(!reduziu)
 		{
 			ptrAux = ptrSrc;
@@ -48,7 +50,7 @@ int main()
 		printf("Reduções S = %d\n",countS);
 	#endif
 
-	printf("dst =%s\n",ptrDst);
-
+	printf("dst = %s\n",ptrDst);
+	
 	return 0;
 }
