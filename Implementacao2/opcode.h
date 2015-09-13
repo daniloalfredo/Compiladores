@@ -9,5 +9,6 @@
 char reducao_K();
 char reducao_S();
 char reducao_C();
+char reducao_C2();
 
 #endif
