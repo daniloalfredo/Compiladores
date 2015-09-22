@@ -1,10 +1,12 @@
 #include "parentese.h"
 
-int buscar_prox_parentese(int pos_inicial)
+// Recebe como parametro a posicao inicial do parentese encontrado e
+// o tipo (1 para apenas encontrar a posição final, 2 para encontrar a posição final e remover os parenteses
+inline int buscar_prox_parentese(int pos_inicial, int tipo)
 {
 	int i = 0;
 	int cont_parentese = 1;
-	int ultimo_parentese = 0;
+	register int pos_final = 0;
 
 	for(i = pos_inicial + 1; i <= ARRAY_SIZE; i++)
 	{
@@ -15,18 +17,23 @@ int buscar_prox_parentese(int pos_inicial)
 		else if(ptrSrc[i] == ')')
 		{
 			cont_parentese--;
-			if(cont_parentese == 0)
-			{
-				return i;
+			if(cont_parentese == 0) {
+                pos_final = i;
+                break;
 			}
 		}
 	}
 
-	return -1;
-}
+    //Se era um parametro entao retorna a posição do parentese final
+	if(tipo == 1) {
+        return pos_final;
+	}
+	//Se esta procurando um operador entao remove os parenteses inicial e final
+    else {
+        memcpy(ptrDst,ptrSrc+pos_inicial+1,(pos_final - 1));
+        memcpy(ptrDst + pos_final - 1,ptrSrc+pos_final + 1,(tamanho_entrada-pos_final)*sizeof(char));
+        tamanho_entrada -= 2;
+    }
 
-void remover_parentese(int pos1, int pos2)
-{
-	memcpy(ptrDst,ptrSrc+pos1+1,(pos2 - 1));
-	memcpy(ptrDst + pos2 - 1,ptrSrc+pos2 + 1,strlen(ptrSrc+pos2)*sizeof(char));	
+	return -1;
 }

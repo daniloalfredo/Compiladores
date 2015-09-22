@@ -8,6 +8,5 @@
 
 char reducao_K();
 char reducao_S();
-char reducao_C();
 
 #endif
