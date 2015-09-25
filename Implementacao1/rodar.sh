@@ -10,3 +10,4 @@ time ./main.bin
 #time ./main.bin
 
 #gprof main.bin gmon.out > log.txt
+#gedit log.txt

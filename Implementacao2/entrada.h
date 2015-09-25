@@ -7,6 +7,8 @@
 extern int countK;
 extern int countS;
 
+extern int tamanho_entrada;
+
 extern char src[ARRAY_SIZE];
 extern char dst[ARRAY_SIZE];
 extern char* ptrSrc;

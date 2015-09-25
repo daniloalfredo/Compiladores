@@ -8,7 +8,11 @@
 
 char reducao_K();
 char reducao_S();
+char reducao_I();
+char reducao_B();
 char reducao_C();
-char reducao_C2();
+char reducao_s();
+char reducao_b();
+char reducao_c();
 
 #endif

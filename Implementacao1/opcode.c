@@ -41,6 +41,7 @@ char reducao_K()
 
     apontadorS = inicioA;
     memcpy(ptrDst+apontadorD,ptrSrc+apontadorS,tamanhoA*sizeof(char));
+    
     apontadorD = apontadorD + tamanhoA ;
 	apontadorS = terminoB + 1;
 	memcpy(ptrDst+apontadorD,ptrSrc+apontadorS,((tamanho_entrada-tamanhoA-tamanhoB))*sizeof(char));
@@ -76,36 +77,35 @@ char reducao_S()
         return 1;
 
     apontadorS = inicioA;
-
     //ptrDst[apontadorD] = '(';
-    //apontadorD++;
 
+    //apontadorD++;
     memcpy(ptrDst + apontadorD, ptrSrc+apontadorS,tamanhoA*sizeof(char));
+
     apontadorD = apontadorD + tamanhoA;
     apontadorS = inicioC;
-
     memcpy(ptrDst + apontadorD, ptrSrc + apontadorS,tamanhoC*sizeof(char));
+
     apontadorD = apontadorD + tamanhoC;
     apontadorS = inicioB;
-
     //ptrDst[apontadorD] = ')';
-    //apontadorD++;
 
+    //apontadorD++;
     ptrDst[apontadorD] = '(';
+
     apontadorD++;
     apontadorS = inicioB;
-
     memcpy(ptrDst + apontadorD, ptrSrc+apontadorS,tamanhoB*sizeof(char));
+
     apontadorD = apontadorD + tamanhoB;
     apontadorS = inicioC;
-
     memcpy(ptrDst + apontadorD, ptrSrc + apontadorS,tamanhoC*sizeof(char));
+
     apontadorD = apontadorD + tamanhoC;
     apontadorS = inicioC + tamanhoC;
-
     ptrDst[apontadorD] = ')';
-    apontadorD++;
 
+    apontadorD++;
     memcpy(ptrDst + apontadorD,ptrSrc + apontadorS,(tamanho_entrada-tamanhoA-tamanhoB-tamanhoC)*sizeof(char));
     tamanho_entrada = tamanho_entrada + 1 + tamanhoC;
 
