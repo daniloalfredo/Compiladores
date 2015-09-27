@@ -4,207 +4,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node{
-	char valor;
-	struct Node *prox;
-};
-typedef struct Node node;
+struct Lista_elementos;
 
-int tam;
+typedef enum {
+    tipo_char,
+    tipo_lista
+} TIPO_ELEMENTO;
 
-void inicia(node *LISTA);
-node *criaNo();
-void insereFim(node *LISTA);
-void insereInicio(node *LISTA);
-void exibe(node *LISTA);
-void libera(node *LISTA);
-void insere (node *LISTA, int pos);
-node *retiraInicio(node *LISTA);
-node *retiraFim(node *LISTA);
-node *retira(node *LISTA, int pos);
+typedef union Uniao_elementos {
+    char operador;
+    struct Lista_elementos* lista;
+} uniao_elementos;
 
-void inicia(node *LISTA)
-{
-	LISTA->prox = NULL;
-	tam=0;
-}
+typedef struct Elemento_lista {
+    TIPO_ELEMENTO tipo;
+    uniao_elementos elemento;
+} elemento_lista;
 
-int vazia(node *LISTA)
-{
-	if(LISTA->prox == NULL)
-		return 1;
-	else
-		return 0;
-}
+typedef struct No_lista {
+   elemento_lista valor;
+   struct No_lista* prox;
+   struct No_lista* antr;
+} no_lista;
 
-node *aloca()
-{
-	node *novo = (node*) malloc(sizeof(node));
-	if(!novo){
-		printf("Sem memoria disponivel!\n");
-		exit(1);
-	}else{
-		printf("Novo elemento: "); scanf("%d", &novo->valor);
-		return novo;
-	}
-}
+typedef struct Lista_elementos {
+    no_lista* comeco;
+    no_lista* fim;
+} lista_elementos;
 
+lista_elementos* novoElementoLista();
+lista_elementos* copiaElementoLista(lista_elementos* lista);
+lista_elementos* cortaElementoLista(lista_elementos* lista, no_lista* no);
 
-void insereFim(node *LISTA)
-{
-	node *novo=aloca();
-	novo->prox = NULL;
+void comutarElementosLista(lista_elementos* lista1, lista_elementos* lista2);
+void concatena_lista(lista_elementos* lista1, lista_elementos* lista2);
+void deletarLista(lista_elementos* lista);
+void inicializarLista(lista_elementos** lista);
+void liberarLista(lista_elementos** lista);
+void listaInsereDir(lista_elementos* lista, no_lista* no, elemento_lista valor);
+void listaInsereEsq(lista_elementos* lista, no_lista* no, elemento_lista valor);
+void insereFim(lista_elementos* lista, elemento_lista valor);
+void insereInicio(lista_elementos* lista, elemento_lista valor);
 
-	if(vazia(LISTA))
-		LISTA->prox=novo;
-	else{
-		node *tmp = LISTA->prox;
-
-		while(tmp->prox != NULL)
-			tmp = tmp->prox;
-
-		tmp->prox = novo;
-	}
-	tam++;
-}
-
-void insereInicio(node *LISTA)
-{
-	node *novo = aloca();
-	node *oldHead = LISTA->prox;
-
-	LISTA->prox = novo;
-	novo->prox = oldHead;
-
-	tam++;
-}
-
-void exibe(node *LISTA)
-{
-	system("clear");
-	if(vazia(LISTA)){
-		printf("Lista vazia!\n\n");
-		return ;
-	}
-
-	node *tmp;
-	tmp = LISTA->prox;
-	printf("Lista:");
-	while( tmp != NULL){
-		printf("%c-", tmp->valor);
-		tmp = tmp->prox;
-	}
-	printf("\n        ");
-	int count;
-	for(count=0 ; count < tam ; count++)
-		printf("  ^  ");
-	printf("\nOrdem:");
-	for(count=0 ; count < tam ; count++)
-		printf("%5d", count+1);
-
-
-	printf("\n\n");
-}
-
-void libera(node *LISTA)
-{
-	if(!vazia(LISTA)){
-		node *proxNode,
-			  *atual;
-
-		atual = LISTA->prox;
-		while(atual != NULL){
-			proxNode = atual->prox;
-			free(atual);
-			atual = proxNode;
-		}
-	}
-}
-
-void insere(node *LISTA, int pos)
-{
-	int count;
-
-	if(pos>0 && pos <= tam){
-		if(pos==1)
-			insereInicio(LISTA);
-		else{
-			node *atual = LISTA->prox,
-				 *anterior=LISTA;
-			node *novo=aloca();
-
-			for(count=1 ; count < pos ; count++){
-					anterior=atual;
-					atual=atual->prox;
-			}
-			anterior->prox=novo;
-			novo->prox = atual;
-			tam++;
-		}
-
-	}else
-		printf("Elemento invalido\n\n");
-}
-
-node *retiraInicio(node *LISTA)
-{
-	if(LISTA->prox == NULL){
-		printf("Lista ja esta vazia\n");
-		return NULL;
-	}else{
-		node *tmp = LISTA->prox;
-		LISTA->prox = tmp->prox;
-		tam--;
-		return tmp;
-	}
-
-}
-
-node *retiraFim(node *LISTA)
-{
-	if(LISTA->prox == NULL){
-		printf("Lista ja vazia\n\n");
-		return NULL;
-	}else{
-		node *ultimo = LISTA->prox,
-			 *penultimo = LISTA;
-
-		while(ultimo->prox != NULL){
-			penultimo = ultimo;
-			ultimo = ultimo->prox;
-		}
-
-		penultimo->prox = NULL;
-		tam--;
-		return ultimo;
-	}
-}
-
-node *retira(node *LISTA, int pos)
-{
-	int opt, count;
-
-	if(opt>0 && opt <= tam){
-		if(opt==1)
-			return retiraInicio(LISTA);
-		else{
-			node *atual = LISTA->prox,
-				 *anterior=LISTA;
-
-			for(count=1 ; count < opt ; count++){
-				anterior=atual;
-				atual=atual->prox;
-			}
-
-		anterior->prox=atual->prox;
-		tam--;
-		return atual;
-		}
-
-	}else{
-		printf("Elemento invalido\n\n");
-		return NULL;
-	}
-}
+elemento_lista removeElemento(lista_elementos* lista, no_lista* no);
+elemento_lista removeFim(lista_elementos* lista);
+elemento_lista removeInicio(lista_elementos* lista);
+elemento_lista inicioLista(lista_elementos* lista);
+elemento_lista finalLista(lista_elementos* lista);
+int listaVazia(lista_elementos* lista);
 
 #endif // LISTA_H
