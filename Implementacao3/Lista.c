@@ -1,5 +1,11 @@
 #include "Lista.h"
 
+int listaVazia(lista_elementos* lista){
+    if(lista == NULL)
+        return 1;
+    return 0;
+}
+
 lista_elementos* novaLista(){
     lista_elementos* nova_lista = (lista_elementos*) malloc(sizeof(lista_elementos));
     nova_lista->comeco = NULL;
@@ -8,9 +14,29 @@ lista_elementos* novaLista(){
 }
 
 lista_elementos* copiaLista(lista_elementos* lista){
+    if(!listaVazia(lista))
+        return NULL;
+
     lista_elementos* nova_lista = (lista_elementos*) malloc(sizeof(lista_elementos));
-    nova_lista->comeco = lista->comeco;
-    nova_lista->fim = lista->fim;
+    lista_elementos* temp = lista;
+    lista_elementos* temp2 = nova_lista;
+
+    temp2->comeco = (no_lista*) malloc(sizeof(no_lista));
+    temp2->comeco->antr = temp->comeco->antr;
+    temp2->comeco->valor = temp->comeco->valor;
+
+    do{
+        if(temp->comeco->prox != NULL){
+            temp2->comeco->prox = (no_lista*) malloc(sizeof(no_lista));
+            temp2->comeco = temp2->comeco->prox;
+            temp->comeco = temp->comeco->prox;
+        }
+
+        temp2->comeco->antr = temp->comeco->antr;
+        temp2->comeco->valor = temp->comeco->valor;
+
+    } while(temp->comeco != lista->fim);
+
     return nova_lista;
 }
 
@@ -54,5 +80,5 @@ elemento_lista removeFim(lista_elementos* lista);
 elemento_lista removeInicio(lista_elementos* lista);
 elemento_lista elementoInicioLista(lista_elementos* lista);
 elemento_lista elementoFinalLista(lista_elementos* lista);
-int listaVazia(lista_elementos* lista);
+
 

@@ -32,7 +32,7 @@ typedef struct Lista_elementos {
     no_lista* fim;
 } lista_elementos;
 
-lista_elementos* novoLista();
+lista_elementos* novaLista();
 lista_elementos* copiaLista(lista_elementos* lista);
 lista_elementos* removeElementoLista(lista_elementos* lista, no_lista* no);
 
