@@ -32,11 +32,11 @@ typedef struct Lista_elementos {
     no_lista* fim;
 } lista_elementos;
 
-lista_elementos* novoElementoLista();
-lista_elementos* copiaElementoLista(lista_elementos* lista);
-lista_elementos* cortaElementoLista(lista_elementos* lista, no_lista* no);
+lista_elementos* novoLista();
+lista_elementos* copiaLista(lista_elementos* lista);
+lista_elementos* removeElementoLista(lista_elementos* lista, no_lista* no);
 
-void comutarElementosLista(lista_elementos* lista1, lista_elementos* lista2);
+void comutarListas(lista_elementos* lista1, lista_elementos* lista2);
 void concatena_lista(lista_elementos* lista1, lista_elementos* lista2);
 void deletarLista(lista_elementos* lista);
 void inicializarLista(lista_elementos** lista);
@@ -49,8 +49,8 @@ void insereInicio(lista_elementos* lista, elemento_lista valor);
 elemento_lista removeElemento(lista_elementos* lista, no_lista* no);
 elemento_lista removeFim(lista_elementos* lista);
 elemento_lista removeInicio(lista_elementos* lista);
-elemento_lista inicioLista(lista_elementos* lista);
-elemento_lista finalLista(lista_elementos* lista);
+elemento_lista elementoInicioLista(lista_elementos* lista);
+elemento_lista elementoFinalLista(lista_elementos* lista);
 int listaVazia(lista_elementos* lista);
 
 #endif // LISTA_H
