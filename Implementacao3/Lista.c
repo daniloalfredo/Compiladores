@@ -65,20 +65,56 @@ void concatena_lista(lista_elementos* lista1, lista_elementos* lista2){
     lista1->fim->prox = lista2->comeco;
     lista2->comeco->antr = lista1->fim;
     lista1->fim = lista2->fim;
+    lista2 = NULL;
 }
 
-void deletarLista(lista_elementos* lista);
-void inicializarLista(lista_elementos** lista);
-void liberarLista(lista_elementos** lista);
+void deletarLista(lista_elementos* lista){
+    no_lista* temp = lista->comeco;
+    no_lista* temp2 = temp;
+    while(temp != lista->fim){
+        temp2 = temp;
+        temp = temp->prox;
+        free(temp2);
+    }
+    free(temp);
+    lista->comeco = NULL;
+    lista->fim = NULL;
+}
+
+//void inicializarLista(lista_elementos** lista);
+//void liberarLista(lista_elementos** lista);
+
 void listaInsereDir(lista_elementos* lista, no_lista* no, elemento_lista valor);
 void listaInsereEsq(lista_elementos* lista, no_lista* no, elemento_lista valor);
-void insereFim(lista_elementos* lista, elemento_lista valor);
-void insereInicio(lista_elementos* lista, elemento_lista valor);
+
+void insereFim(lista_elementos* lista, elemento_lista valor){
+    no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
+    novo->valor = valor;
+    novo->prox = NULL;
+    novo->antr = lista->fim;
+    lista->fim->prox = novo;
+    lista->fim = novo;
+}
+
+void insereInicio(lista_elementos* lista, elemento_lista valor){
+    no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
+    novo->valor = valor;
+    novo->prox = lista->comeco;
+    novo->antr = NULL;
+    lista->comeco->antr = novo;
+    lista->comeco = novo;
+}
 
 elemento_lista removeElemento(lista_elementos* lista, no_lista* no);
 elemento_lista removeFim(lista_elementos* lista);
 elemento_lista removeInicio(lista_elementos* lista);
-elemento_lista elementoInicioLista(lista_elementos* lista);
-elemento_lista elementoFinalLista(lista_elementos* lista);
+
+elemento_lista elementoInicioLista(lista_elementos* lista){
+    return lista->comeco->valor;
+}
+
+elemento_lista elementoFinalLista(lista_elementos* lista){
+    return lista->fim->valor;
+}
 
 
