@@ -1,7 +1,7 @@
 #include "Lista.h"
 
-int listaVazia(lista_elementos* lista){
-    if(lista == NULL)
+inline int listaVazia(lista_elementos* lista){
+    if(lista->comeco == NULL)
         return 1;
     return 0;
 }
@@ -68,6 +68,7 @@ void concatena_lista(lista_elementos* lista1, lista_elementos* lista2){
     lista2 = NULL;
 }
 
+// Consertar para se valor for uma lista
 void deletarLista(lista_elementos* lista){
     no_lista* temp = lista->comeco;
     no_lista* temp2 = temp;
@@ -91,17 +92,29 @@ void insereFim(lista_elementos* lista, elemento_lista valor){
     no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
     novo->valor = valor;
     novo->prox = NULL;
-    novo->antr = lista->fim;
-    lista->fim->prox = novo;
+    if(!listaVazia(lista)){
+        novo->antr = lista->fim;
+        lista->fim->prox = novo;
+    }
+    else{
+        novo->antr = NULL;
+        lista->comeco = novo;
+    }
     lista->fim = novo;
 }
 
 void insereInicio(lista_elementos* lista, elemento_lista valor){
     no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
     novo->valor = valor;
-    novo->prox = lista->comeco;
     novo->antr = NULL;
-    lista->comeco->antr = novo;
+    if(!listaVazia(lista)){
+        novo->prox = lista->comeco;
+        lista->comeco->antr = novo;
+    }
+    else{
+        novo->prox = NULL;
+        lista->fim = novo;
+    }
     lista->comeco = novo;
 }
 
