@@ -1,56 +1,38 @@
 #ifndef LISTA_H
-#define LISTA_H
+	#define LISTA_H
 
-#include <stdio.h>
-#include <stdlib.h>
+	#include <stdio.h>
+	#include <string.h>
+	#include <stdlib.h>
 
-struct Lista_elementos;
+	typedef enum {char_t, list_t} element_type;
 
-typedef enum {
-    tipo_char,
-    tipo_lista
-} TIPO_ELEMENTO;
+	struct lista; 
 
-typedef union Uniao_elementos {
-    char operador;
-    struct Lista_elementos* lista;
-} uniao_elementos;
+	typedef union elemento_union
+	{
+		char letra;
+		struct lista* arg;
+	} elemento_t;
 
-typedef struct Elemento_lista {
-    TIPO_ELEMENTO tipo;
-    uniao_elementos elemento;
-} elemento_lista;
+	typedef struct node
+	{
+		element_type tipo; 
+		elemento_t info;
+		struct node* prox;
+	} Node;
 
-typedef struct No_lista {
-   elemento_lista valor;
-   struct No_lista* prox;
-   struct No_lista* antr;
-} no_lista;
+	typedef struct lista{
+		Node* begin;
+		Node* end;
+	} Lista;
 
-typedef struct Lista_elementos {
-    no_lista* comeco;
-    no_lista* fim;
-} lista_elementos;
-
-lista_elementos* novaLista();
-lista_elementos* copiaLista(lista_elementos* lista);
-lista_elementos* removeElementoLista(lista_elementos* lista, no_lista* no);
-
-void comutarListas(lista_elementos* lista1, lista_elementos* lista2);
-void concatena_lista(lista_elementos* lista1, lista_elementos* lista2);
-void deletarLista(lista_elementos* lista);
-void inicializarLista(lista_elementos** lista);
-void liberarLista(lista_elementos** lista);
-void listaInsereDir(lista_elementos* lista, no_lista* no, elemento_lista valor);
-void listaInsereEsq(lista_elementos* lista, no_lista* no, elemento_lista valor);
-void insereFim(lista_elementos* lista, elemento_lista valor);
-void insereInicio(lista_elementos* lista, elemento_lista valor);
-
-elemento_lista removeElemento(lista_elementos* lista, no_lista* no);
-elemento_lista removeFim(lista_elementos* lista);
-elemento_lista removeInicio(lista_elementos* lista);
-elemento_lista elementoInicioLista(lista_elementos* lista);
-elemento_lista elementoFinalLista(lista_elementos* lista);
-int listaVazia(lista_elementos* lista);
-
-#endif // LISTA_H
+	int fimPar(int K, char src[]);
+	Node* criaNo(char c, element_type tipo,int comP, int fimP, char src[]);
+	Lista* criaLista(int i, int j, char src[]);
+	void imprimeLista(Lista* inicio);
+	void insertFront(Lista* word, Node* arg);
+	void insertBack(Lista* word, Node* arg);
+	void shiftRight(Lista* word);
+	void freeNode(Node* no); //falta implementar
+#endif

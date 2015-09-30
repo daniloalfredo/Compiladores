@@ -1,133 +1,148 @@
-#include "Lista.h"
+#include "lista.h"
 
-inline int listaVazia(lista_elementos* lista){
-    if(lista->comeco == NULL)
-        return 1;
-    return 0;
+/*Função para achar o final do parentese*/
+int fimPar(int pos_inicial, char src[])
+{
+	int i = 0;
+	int cont_parentese = 1;
+	register int pos_final = 0;
+
+	for(i = pos_inicial + 1; src[i] != '\0'; i++)
+	{
+		if(src[i] == '(')
+		{
+			cont_parentese++;
+		}
+		else if(src[i] == ')')
+		{
+			cont_parentese--;
+			if(cont_parentese == 0) {
+                pos_final = i;
+                break;
+			}
+		}
+	}
+
+	return pos_final;
 }
 
-lista_elementos* novaLista(){
-    lista_elementos* nova_lista = (lista_elementos*) malloc(sizeof(lista_elementos));
-    nova_lista->comeco = NULL;
-    nova_lista->fim = NULL;
-    return nova_lista;
+/*Função para criar o nó*/
+Node* criaNo(char c, element_type tipo, int comP, int fimP, char src[])
+{
+	Node* no = (Node*) malloc (sizeof(Node));
+	if(tipo == char_t)
+	{
+		no->tipo = tipo;
+		no->info.letra = c;
+		//no->baixo = NULL;
+		no->prox = NULL;
+	}
+	else
+	{
+		no->tipo = tipo;
+		no->info.arg = criaLista(comP+1, fimP-1, src);
+		//no->baixo = criaLista(comP+1,fimP-1,src);
+		no->prox = NULL;
+	}
 }
 
-lista_elementos* copiaLista(lista_elementos* lista){
-    if(!listaVazia(lista))
-        return NULL;
+/* inserção no fim da lista*/
+Lista* criaLista(int i, int j, char src[])
+{
+	Lista* inicio = (Lista*) malloc (sizeof(Lista));
+	inicio->begin = NULL; inicio->end = NULL;
+	int k = 0;
 
-    lista_elementos* nova_lista = (lista_elementos*) malloc(sizeof(lista_elementos));
-    lista_elementos* temp = lista;
-    lista_elementos* temp2 = nova_lista;
-
-    temp2->comeco = (no_lista*) malloc(sizeof(no_lista));
-    temp2->comeco->antr = temp->comeco->antr;
-    temp2->comeco->valor = temp->comeco->valor;
-
-    do{
-        if(temp->comeco->prox != NULL){
-            temp2->comeco->prox = (no_lista*) malloc(sizeof(no_lista));
-            temp2->comeco = temp2->comeco->prox;
-            temp->comeco = temp->comeco->prox;
-        }
-
-        temp2->comeco->antr = temp->comeco->antr;
-        temp2->comeco->valor = temp->comeco->valor;
-
-    } while(temp->comeco != lista->fim);
-
-    return nova_lista;
+	for (k = i;k <= j; k++)
+	{
+		if(src[k] != '(')
+		{
+			if(inicio->begin==NULL)
+			{
+				inicio->begin = criaNo(src[k],char_t,0,0,src);
+			}
+			else
+			{
+				Node* ptr;
+				for(ptr = inicio->begin;ptr->prox != NULL;ptr = ptr->prox);
+				ptr->prox = criaNo(src[k],char_t,0,0,src);
+				inicio->end = ptr->prox;
+			}
+		}
+		else
+		{
+			int comP, fimP;
+			comP = k;
+			fimP = fimPar(k,src);
+			
+			if(inicio->begin==NULL){
+				inicio->begin = criaNo(0,list_t,comP,fimP,src);
+			}
+			else
+			{
+				Node* ptr = NULL;
+				for(ptr = inicio->begin ;ptr->prox != NULL;ptr = ptr->prox);
+				ptr->prox = criaNo(0,list_t,comP,fimP,src);
+				inicio->end = ptr->prox;
+			}
+			k = fimP;
+		}
+	}
+	return inicio;	
 }
 
-lista_elementos* removeElementoLista(lista_elementos* lista, no_lista* no){
-    no_lista* temp = lista->comeco;
-
-    while(temp != no && temp != lista->fim)
-        temp = temp->prox;
-
-    if(temp != no)
-        exit(1);
-
-    temp->antr->prox = temp->prox;
-    temp->prox->antr = temp->antr;
-    free(temp);
-    return lista;
+void imprimeLista(Lista* inicio)
+{
+	Node* ptr = inicio->begin;
+	while(ptr != NULL)
+	{
+		if(ptr->tipo == char_t)
+		{
+			printf("%c",ptr->info.letra);
+		}
+		else
+		{
+			printf("(");
+			imprimeLista(ptr->info.arg);
+			printf(")");
+		}
+		ptr = ptr->prox;
+	}
 }
 
-void comutarListas(lista_elementos* lista1, lista_elementos* lista2){
-    lista_elementos* temp = lista1;
-    lista1 = lista2;
-    lista2 = temp;
+//insere o no value na frente da lista
+void insertFront(Lista* word, Node* value)
+{
+	element_type tipo = value->tipo;
+	Node* no = (Node*) malloc(sizeof(Node));
+	no->tipo = tipo;
+	if (tipo == char_t){
+		no->info.letra = value->info.letra;
+	}
+	else
+		no->info.arg = value->info.arg;
+	no->prox = word->begin;
+	word->begin = no;
 }
 
-void concatena_lista(lista_elementos* lista1, lista_elementos* lista2){
-    lista1->fim->prox = lista2->comeco;
-    lista2->comeco->antr = lista1->fim;
-    lista1->fim = lista2->fim;
-    lista2 = NULL;
+void insertBack(Lista* word, Node* value)
+{
+	element_type tipo = value->tipo;
+	Node* no = (Node*) malloc(sizeof(Node));
+	no->tipo = tipo;
+	if (tipo == char_t){
+		no->info.letra = value->info.letra;
+	}
+	else
+		no->info.arg = value->info.arg;
+	no->prox = NULL;
+	word->end->prox = no;
+	word->end = no;	
 }
 
-// Consertar para se valor for uma lista
-void deletarLista(lista_elementos* lista){
-    no_lista* temp = lista->comeco;
-    no_lista* temp2 = temp;
-    while(temp != lista->fim){
-        temp2 = temp;
-        temp = temp->prox;
-        free(temp2);
-    }
-    free(temp);
-    lista->comeco = NULL;
-    lista->fim = NULL;
+void shiftRight(Lista* word)
+{
+	Node* tmp = word->begin;
+	word->begin = tmp->prox;
+	//freeNode(tmp);	
 }
-
-//void inicializarLista(lista_elementos** lista);
-//void liberarLista(lista_elementos** lista);
-
-void listaInsereDir(lista_elementos* lista, no_lista* no, elemento_lista valor);
-void listaInsereEsq(lista_elementos* lista, no_lista* no, elemento_lista valor);
-
-void insereFim(lista_elementos* lista, elemento_lista valor){
-    no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
-    novo->valor = valor;
-    novo->prox = NULL;
-    if(!listaVazia(lista)){
-        novo->antr = lista->fim;
-        lista->fim->prox = novo;
-    }
-    else{
-        novo->antr = NULL;
-        lista->comeco = novo;
-    }
-    lista->fim = novo;
-}
-
-void insereInicio(lista_elementos* lista, elemento_lista valor){
-    no_lista* novo = (no_lista*) malloc(sizeof(no_lista));
-    novo->valor = valor;
-    novo->antr = NULL;
-    if(!listaVazia(lista)){
-        novo->prox = lista->comeco;
-        lista->comeco->antr = novo;
-    }
-    else{
-        novo->prox = NULL;
-        lista->fim = novo;
-    }
-    lista->comeco = novo;
-}
-
-elemento_lista removeElemento(lista_elementos* lista, no_lista* no);
-elemento_lista removeFim(lista_elementos* lista);
-elemento_lista removeInicio(lista_elementos* lista);
-
-elemento_lista elementoInicioLista(lista_elementos* lista){
-    return lista->comeco->valor;
-}
-
-elemento_lista elementoFinalLista(lista_elementos* lista){
-    return lista->fim->valor;
-}
-
-
