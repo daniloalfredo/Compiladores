@@ -13,21 +13,37 @@ char reducao_K(Lista* word)
 	Node* arg_B = ptr->prox;
 	if (arg_B == NULL)
 		return 1;
-	//fazendo a redução
-	if(arg_A->tipo == char_t)
+	arg_A->prox = arg_B->prox;
+	//freeNode(arg_B);
+	return 0;
+}
+
+char reducao_S(Lista* word)
+{
+	shiftRight(word); //tira o caractere S 
+	int i = 0;
+	Node* ptr = word->begin;
+	//pega os argumentos A, B e C
+	Node* arg_A = ptr; 
+	if (arg_A == NULL)
+		return 1;
+	Node* arg_B = arg_A->prox;
+	if (arg_B == NULL)
+		return 1;
+	Node* arg_C = arg_B->prox;
+	if (arg_C == NULL)
+		return 1;
+	//aqui cria-se os dois argumentos de saída (AC) e (BC)
+	Node* outarg_A = createArg(arg_A->info, arg_A->tipo); //saída -> (A)
+	Node* outarg_B = createArg(arg_B->info, arg_B->tipo); //saída -> (B)
+	insertBack(outarg_A->info.arg, arg_C); //saída -> (AC)
+	insertBack(outarg_B->info.arg, arg_C); //saída -> (BC)
+	for (i = 0; i < 3; i++)
 	{
-		//"deletando" a referência ao argumento B
-		arg_A->prox = arg_B->prox;
-		//freeNode(arg_B); //deletando de fato o argumento B da memória
+		shiftRight(word); //retira A, B e C da string
 	}
-	//se o argumento A for uma lista
-	else
-	{
-		Lista* tmp = arg_A->info.arg;
-		Node* endTmp = tmp->end; //pegando o final de A
-		word->begin = tmp->begin; //colocando a cabeça de A como a cabeça da lista principal
-		endTmp->prox = arg_B->prox; //ligando o final de A com o resto da lista principal, "deletando" a referência ao argumento B no processo
-		//freeNode(arg_B); //deletando de fato o argumento B da memória
-	}
+	//insere os novos argumentos
+	insertFront(word, outarg_B); //saída = (BC)->resto da string
+	insertFront(word, outarg_A); //saída = (AC)->(BC)->resto da string
 	return 0;
 }

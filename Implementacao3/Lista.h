@@ -35,4 +35,6 @@
 	void insertBack(Lista* word, Node* arg);
 	void shiftRight(Lista* word);
 	void freeNode(Node* no); //falta implementar
+	void removeParentese(Lista* word);
+	Node* createArg(elemento_t value, element_type tipo);
 #endif

@@ -119,8 +119,9 @@ void insertFront(Lista* word, Node* value)
 	if (tipo == char_t){
 		no->info.letra = value->info.letra;
 	}
-	else
+	else{
 		no->info.arg = value->info.arg;
+	}
 	no->prox = word->begin;
 	word->begin = no;
 }
@@ -142,7 +143,41 @@ void insertBack(Lista* word, Node* value)
 
 void shiftRight(Lista* word)
 {
-	Node* tmp = word->begin;
-	word->begin = tmp->prox;
+	word->begin = word->begin->prox;
 	//freeNode(tmp);	
+}
+
+void removeParentese(Lista* word)
+{
+	Node* tmp = word->begin;
+	if (tmp->tipo == char_t)
+		return;
+	else 
+	{
+		Lista* arg = tmp->info.arg;
+		word->begin = arg->begin;
+		arg->end->prox = tmp->prox;
+		free(arg);
+		removeParentese(word);
+	}		 
+}
+
+Node* createArg(elemento_t value, element_type tipo)
+{
+	Node* out = (Node*) malloc(sizeof(Node)); //o nó será o argumento novo a ser criado
+	out->tipo = list_t;
+	Lista* output = (Lista*) malloc(sizeof(Lista)); //a lista conterá os elementos do argumento
+	Node* comeco = (Node*) malloc(sizeof(Node)); //esse outro nó armazena o primeiro elemento do argumento, passado por parâmetro
+	if (tipo == char_t)
+	{
+		comeco->info.letra = value.letra;
+	}
+	else
+	{
+		comeco->info.arg = value.arg;
+	}
+	output->begin = comeco;
+	output->end = comeco;
+	out->info.arg = output; 
+	return out;
 }

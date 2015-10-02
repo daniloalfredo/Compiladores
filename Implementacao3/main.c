@@ -5,7 +5,7 @@
 #include "entrada.h"
 #include "reducao.h"
 
-char src[ARRAY_SIZE] = "K(ab)(ba)";
+char src[ARRAY_SIZE] = "S(aa)(bb)(cc)";
 
 int main() 
 {
@@ -17,12 +17,16 @@ int main()
 	printf("\n");
 	while(!reduziu)
 	{
+		removeParentese(inicio);
 		switch(inicio->begin->info.letra)
 		{
-			case 'K':
-				reduziu = reducao_K(inicio);
-				break;
-			default: reduziu = 1;
+		case 'K':
+			reduziu = reducao_K(inicio);
+			break;
+		case 'S':
+			reduziu = reducao_S(inicio);
+			break;
+		default: reduziu = 1;
 		}
 	}
 	imprimeLista(inicio);
