@@ -4,6 +4,7 @@
 	#include <stdio.h>
 	#include <string.h>
 	#include <stdlib.h>
+	#include "entrada.h"
 
 	typedef enum {char_t, list_t} element_type;
 
@@ -34,7 +35,11 @@
 	void insertFront(Lista* word, Node* arg);
 	void insertBack(Lista* word, Node* arg);
 	void shiftRight(Lista* word);
-	void freeNode(Node* no); //falta implementar
 	void removeParentese(Lista* word);
+	Lista* cloneList(Lista* dolly);
 	Node* createArg(elemento_t value, element_type tipo);
+	void freeList(Lista* lst);
+	void freeNode(Node* no); 
+	void printNode(Node* no);
+	Node* cpyNode(Node* no);
 #endif

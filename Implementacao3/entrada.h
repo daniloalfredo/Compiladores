@@ -14,5 +14,12 @@
 	extern int countc;
 
 	extern char src[ARRAY_SIZE];
+
+	#define _DEBUG_ 
+	#ifdef _DEBUG_
+		#define DEBUG_PRINT(x) printf(x)
+	#else
+		#define DEBUG_PRINT(x)
+	#endif
 	
 #endif

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lista.h"
+#include "entrada.h"
 
 char reducao_K(Lista* word);
 char reducao_S(Lista* word);
