@@ -37,7 +37,7 @@
 	void shiftRight(Lista* word);
 	void removeParentese(Lista* word);
 	Lista* cloneList(Lista* dolly);
-	Node* createArg(elemento_t value, element_type tipo);
+	Node* createArg(Node* value);
 	void freeList(Lista* lst);
 	void freeNode(Node* no); 
 	void printNode(Node* no);

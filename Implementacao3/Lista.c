@@ -160,62 +160,43 @@ Lista* cloneList(Lista* dolly)
 	while(ptr!=NULL)
 	{
 		Node* tmp = ptr;
-		if (tmp->tipo == char_t)
+		if(clone->begin != NULL)
 		{
-			if(clone->begin != NULL)
-			{
-				Node* aux = (Node*)malloc(sizeof(Node));
-				aux->tipo = tmp->tipo;
+			Node* aux = (Node*)malloc(sizeof(Node));
+			aux->tipo = tmp->tipo;
+			aux->prox = NULL;
+			clone->end->prox = aux;
+			clone->end = aux;
+			if(aux->tipo == char_t)
 				aux->info.letra = tmp->info.letra;
-				aux->prox = NULL;
-				clone->end->prox = aux;
-				clone->end = aux;
-			}
 			else
-			{
-				clone->begin = (Node*) malloc (sizeof(Node));
-				clone->begin->tipo = tmp->tipo;
-				clone->begin->prox = NULL;
-				clone->begin->info.letra = tmp->info.letra;
-				clone->end = clone->begin;
-			}
-			//DEBUG_PRINT("inseriu letra\n");
+				aux->info.arg = cloneList(tmp->info.arg);
 		}
 		else
 		{
-			if(clone->begin != NULL)
-			{
-				Node* aux = (Node*) malloc(sizeof(Node));
-				aux->tipo = tmp->tipo;
-				aux->info.arg = cloneList(tmp->info.arg);
-				aux->prox = NULL;
-				clone->end->prox = aux;
-				clone->end = aux;
-			}
+			clone->begin = (Node*) malloc (sizeof(Node));
+			clone->begin->tipo = tmp->tipo;
+			clone->begin->prox = NULL;
+			if(tmp->tipo == char_t)
+				clone->begin->info.letra = tmp->info.letra;
 			else
-			{
-				clone->begin = (Node*)malloc(sizeof(Node));
-				clone->begin->tipo = tmp->tipo;
 				clone->begin->info.arg = cloneList(tmp->info.arg);
-				clone->begin->prox = NULL;
-				clone->end = clone->begin;
-			}
-			//DEBUG_PRINT("inseriu lista\n");
+			clone->end = clone->begin;
 		}
 		ptr = ptr->prox; 
 	}
 	return clone;
 }
 
-Node* createArg(elemento_t value, element_type tipo)
+Node* createArg(Node* value)
 {
 	Node* out = (Node*) malloc(sizeof(Node)); //o nó será o argumento novo a ser criado
 	out->tipo = list_t;
 	Lista* output = (Lista*) malloc(sizeof(Lista)); //a lista conterá os elementos do argumento
-	Node* comeco = (Node*) malloc(sizeof(Node)); //esse outro nó armazena o primeiro elemento do argumento, passado por parâmetro
+	/*Node* comeco = (Node*) malloc(sizeof(Node)); //esse outro nó armazena o primeiro elemento do argumento, passado por parâmetro
 	if (tipo == char_t)
 	{
-		comeco->info.letra = value.letra;
+		comeco->info.letra = value.letra;  
 		comeco->tipo = tipo;
 	}
 	else
@@ -224,7 +205,10 @@ Node* createArg(elemento_t value, element_type tipo)
 		comeco->tipo = tipo;
 	}
 	output->begin = comeco;
-	output->end = comeco;
+	output->end = comeco;*/
+	output->begin = value; 
+	output->end = value;
+	value->prox = NULL;
 	out->info.arg = output; 
 	out->prox = NULL;
 	return out;
@@ -240,6 +224,7 @@ void freeList(Lista* lst){
 		else
 			freeList(tmp->info.arg);
 	}
+	//free(lst->begin); free(lst->end);
 	free(lst);
 }
 
