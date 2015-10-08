@@ -44,6 +44,7 @@ Node* criaNo(char c, element_type tipo, int comP, int fimP, char src[])
 		//no->baixo = criaLista(comP+1,fimP-1,src);
 		no->prox = NULL;
 	}
+	return no;
 }
 
 /* inserção no fim da lista*/
@@ -111,31 +112,17 @@ void imprimeLista(Lista* inicio)
 }
 
 //insere o no value na frente da lista
+//insere o no value na frente da lista
 void insertFront(Lista* word, Node* value)
 {
-	element_type tipo = value->tipo;
-	Node* no = (Node*) malloc(sizeof(Node));
-	no->tipo = tipo;
-	if (tipo == char_t){
-		no->info.letra = value->info.letra;
-	}
-	else{
-		no->info.arg = cloneList(value->info.arg);
-	}
+	Node* no = cpyNode(value);
 	no->prox = word->begin;
 	word->begin = no;
 }
 
 void insertBack(Lista* word, Node* value)
 {
-	element_type tipo = value->tipo;
-	Node* no = (Node*) malloc(sizeof(Node));
-	no->tipo = tipo;
-	if (tipo == char_t){
-		no->info.letra = value->info.letra;
-	}
-	else
-		no->info.arg = cloneList(value->info.arg);
+	Node* no = cpyNode(value);
 	no->prox = NULL;
 	word->end->prox = no;
 	word->end = no;	
@@ -158,6 +145,9 @@ void removeParentese(Lista* word)
 		Lista* arg = tmp->info.arg;
 		word->begin = arg->begin;
 		arg->end->prox = tmp->prox;
+		if (tmp->prox == NULL)
+			word->end = arg->end;
+		free(arg);
 		removeParentese(word);
 	}		 
 }
@@ -250,12 +240,14 @@ void freeList(Lista* lst){
 		else
 			freeList(tmp->info.arg);
 	}
+	free(lst);
 }
 
 void freeNode(Node* no){
 	if (no->tipo == list_t)
 	{
 		freeList(no->info.arg);
+		free(no);
 	}
 	else
 		free(no);

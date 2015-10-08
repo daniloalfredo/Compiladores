@@ -15,7 +15,7 @@
 
 	extern char src[ARRAY_SIZE];
 
-	#define _DEBUG_ 
+	//#define _DEBUG_ 
 	#ifdef _DEBUG_
 		#define DEBUG_PRINT(x) printf(x)
 	#else
