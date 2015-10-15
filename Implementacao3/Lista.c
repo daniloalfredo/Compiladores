@@ -75,7 +75,7 @@ Lista* criaLista(int i, int j, char src[])
 			int comP, fimP;
 			comP = k;
 			fimP = fimPar(k,src);
-			
+
 			if(inicio->begin==NULL){
 				inicio->begin = criaNo(0,list_t,comP,fimP,src);
 			}
@@ -89,7 +89,7 @@ Lista* criaLista(int i, int j, char src[])
 			k = fimP;
 		}
 	}
-	return inicio;	
+	return inicio;
 }
 
 void imprimeLista(Lista* inicio)
@@ -111,28 +111,11 @@ void imprimeLista(Lista* inicio)
 	}
 }
 
-//insere o no value na frente da lista
-//insere o no value na frente da lista
-void insertFront(Lista* word, Node* value)
-{
-	Node* no = cpyNode(value);
-	no->prox = word->begin;
-	word->begin = no;
-}
-
-void insertBack(Lista* word, Node* value)
-{
-	Node* no = cpyNode(value);
-	no->prox = NULL;
-	word->end->prox = no;
-	word->end = no;	
-}
-
 void shiftRight(Lista* word)
 {
 	Node* tmp = word->begin;
 	word->begin = tmp->prox;
-	freeNode(tmp);	
+	freeNode(tmp);
 }
 
 void removeParentese(Lista* word)
@@ -140,7 +123,7 @@ void removeParentese(Lista* word)
 	Node* tmp = word->begin;
 	if (tmp->tipo == char_t)
 		return;
-	else 
+	else
 	{
 		Lista* arg = tmp->info.arg;
 		word->begin = arg->begin;
@@ -149,43 +132,7 @@ void removeParentese(Lista* word)
 			word->end = arg->end;
 		free(arg);
 		removeParentese(word);
-	}		 
-}
-
-Lista* cloneList(Lista* dolly)
-{
-	Lista* clone = (Lista*)malloc(sizeof(Lista));
-	clone->begin = clone->end = NULL;
-	Node* ptr = dolly->begin;
-	while(ptr!=NULL)
-	{
-		Node* tmp = ptr;
-		if(clone->begin != NULL)
-		{
-			Node* aux = (Node*)malloc(sizeof(Node));
-			aux->tipo = tmp->tipo;
-			aux->prox = NULL;
-			clone->end->prox = aux;
-			clone->end = aux;
-			if(aux->tipo == char_t)
-				aux->info.letra = tmp->info.letra;
-			else
-				aux->info.arg = cloneList(tmp->info.arg);
-		}
-		else
-		{
-			clone->begin = (Node*) malloc (sizeof(Node));
-			clone->begin->tipo = tmp->tipo;
-			clone->begin->prox = NULL;
-			if(tmp->tipo == char_t)
-				clone->begin->info.letra = tmp->info.letra;
-			else
-				clone->begin->info.arg = cloneList(tmp->info.arg);
-			clone->end = clone->begin;
-		}
-		ptr = ptr->prox; 
 	}
-	return clone;
 }
 
 Node* createArg(Node* value)
@@ -196,7 +143,7 @@ Node* createArg(Node* value)
 	/*Node* comeco = (Node*) malloc(sizeof(Node)); //esse outro nó armazena o primeiro elemento do argumento, passado por parâmetro
 	if (tipo == char_t)
 	{
-		comeco->info.letra = value.letra;  
+		comeco->info.letra = value.letra;
 		comeco->tipo = tipo;
 	}
 	else
@@ -206,10 +153,10 @@ Node* createArg(Node* value)
 	}
 	output->begin = comeco;
 	output->end = comeco;*/
-	output->begin = value; 
+	output->begin = value;
 	output->end = value;
 	value->prox = NULL;
-	out->info.arg = output; 
+	out->info.arg = output;
 	out->prox = NULL;
 	return out;
 }
@@ -246,18 +193,4 @@ void printNode(Node* no)
 	}
 	else
 		printf("%c", no->info.letra);
-}
-
-Node* cpyNode(Node* no)
-{
-	Node* output = (Node*) malloc(sizeof(Node));
-	output->tipo = no->tipo;
-	if (output->tipo == list_t)
-	{
-		output->info.arg = cloneList(no->info.arg);
-	}
-	else
-		output->info.letra = no->info.letra;
-	output->prox = NULL;
-	return output;
 }
